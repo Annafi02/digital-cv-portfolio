@@ -1,0 +1,8 @@
+{
+  "title": "Automatic Heat Transfer Machine",
+  "year": "2015-2023",
+  "category": "Machine Development & Automation",
+  "description": "Project Overview\n\n\n\nDevelopment of a fully automated heat transfer machine from the ground up to replace the conventional manual heat transfer process.\n\n\n\nPrevious Process\n\n\n\nThe original process used a manual heat transfer press. Operators had to press two buttons simultaneously (left and right) to activate the pressing mechanism. However, positioning and applying labels or transfer panels were still performed manually.\n\n\n\nAutomation Solution\n\n\n\nDeveloped a new automated machine integrating:\n\n- Automatic label pick-up mechanism.\n\n- Automatic label positioning and application.\n\n- Automatic heat transfer pressing operation.\n\n\n\nMy Contribution\n\n\n\nInvolved in the machine development process from concept to implementation, focusing on automation engineering, machine development, and process automation.\n\n\n\nImplementation\n\n\n\nA total of 29 units were developed and implemented.",
+  "technologies": "Machine Development, Industrial Automation, Electrical Control, Mechanical Integration, Automatic Handling",
+  "sort_order": 1
+}
