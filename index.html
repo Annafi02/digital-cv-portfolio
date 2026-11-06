@@ -196,7 +196,12 @@ async function getRepositoryFiles() {
           throw new Error("Unexpected repository file-list format from jsDelivr");
         }
         return data.files
-          .map(file => typeof file.name === "string" ? file.name : "")
+          .map(file => {
+            const name = typeof file.name === "string" ? file.name : "";
+            // jsDelivr may return paths with a leading slash.
+            // Normalize them so they match folders such as "content/projects".
+            return name.replace(/^\\/+/, "");
+          })
           .filter(Boolean);
       })
       .catch(error => {
@@ -233,6 +238,12 @@ async function getCollection(folder) {
     const jsonFiles = files.filter(path =>
       path.startsWith(prefix) && path.endsWith(".json")
     );
+
+    if (jsonFiles.length === 0) {
+      console.warn(
+        `No JSON files found for ${folder}. Check the repository file paths returned by jsDelivr.`
+      );
+    }
 
     const items = await Promise.all(
       jsonFiles.map(async path => {
