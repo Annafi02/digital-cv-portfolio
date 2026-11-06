@@ -4,5 +4,5 @@
   "category": "Machine Development & Automation",
   "description": "Project Overview\n\nDevelopment of a fully automatic elastic waistband cutting machine to replace the conventional manual cutting process.\n\nPrevious Process\n\nThe elastic waistband cutting operation was performed manually using scissors. Operators had to measure the required length manually before cutting each piece.\n\nAutomation Solution\n\nDeveloped a fully automated cutting machine to integrate the measuring and cutting operations into a single automated process.\n\nThe solution was intended to improve process consistency and reduce repetitive manual measuring and cutting activities.\n\nMy Contribution\n\nInvolved in machine development and automation engineering, from developing the automated process concept to machine implementation.\n\nImplementation\n\nA total of 2 units were developed and implemented.",
   "technologies": "Machine Development, Industrial Automation, Automatic Measurement, Automatic Cutting, Electrical Control",
-  "sort_order": 1
+  "sort_order": 4
 }
