@@ -228,7 +228,7 @@ async function getJSONFile(path) {
 async function getCollection(folder) {
   try {
     const files = await getRepositoryFiles();
-    const prefix = folder.replace(/\\/$/, "") + "/";
+    const prefix = folder.replace(/\/$/, "") + "/";
 
     const jsonFiles = files.filter(path =>
       path.startsWith(prefix) && path.endsWith(".json")
