@@ -1,0 +1,328 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Professional Digital CV and Engineering Portfolio">
+<title>Digital CV | Automation & Electronics Engineer</title>
+<style>
+:root {
+  --bg:#101114; --panel:#191b20; --text:#f4f4f5;
+  --muted:#a3a5ad; --line:#30323a; --accent:#a9c5ff;
+}
+* { box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body {
+  margin:0; background:var(--bg); color:var(--text);
+  font-family:Arial,Helvetica,sans-serif; line-height:1.7;
+}
+a { color:inherit; text-decoration:none; }
+nav {
+  position:sticky; top:0; z-index:10;
+  background:#101114ee; backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--line);
+}
+.nav-inner {
+  max-width:1100px; margin:auto; padding:14px 22px;
+  display:flex; justify-content:space-between; align-items:center;
+  gap:20px; flex-wrap:wrap;
+}
+.logo { font-weight:800; letter-spacing:1px; }
+.nav-links { display:flex; gap:18px; flex-wrap:wrap; font-size:13px; color:var(--muted); }
+.nav-links a:hover { color:var(--accent); }
+main { max-width:1100px; margin:auto; padding:30px 22px 80px; }
+.hero {
+  min-height:440px; display:flex; align-items:center;
+  gap:45px; padding:65px 0;
+}
+.hero-copy { flex:1; }
+.eyebrow { color:var(--accent); text-transform:uppercase; letter-spacing:3px; font-size:12px; }
+h1 { font-size:clamp(36px,6vw,64px); line-height:1.12; margin:18px 0; }
+h2 { font-size:28px; margin:0 0 28px; }
+h3 { margin:0 0 8px; }
+p { color:var(--muted); }
+.hero-desc { max-width:650px; font-size:17px; }
+.photo {
+  width:220px; height:270px; object-fit:cover;
+  border-radius:18px; background:var(--panel);
+  border:1px solid var(--line);
+}
+.btn {
+  display:inline-block; padding:11px 20px; margin-top:15px;
+  border:1px solid var(--accent); border-radius:7px;
+  color:var(--accent); font-size:14px;
+}
+section { padding:65px 0; border-top:1px solid var(--line); }
+.section-note { color:var(--muted); margin-top:-18px; }
+.grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:18px; }
+.card {
+  background:var(--panel); border:1px solid var(--line);
+  border-radius:12px; padding:23px; min-width:0;
+}
+.card p { white-space:pre-line; }
+.meta { color:var(--accent); font-size:13px; margin-bottom:9px; }
+.project-image {
+  width:100%; aspect-ratio:16/9; object-fit:cover;
+  border-radius:8px; margin-bottom:15px; background:#252832;
+}
+.tags { display:flex; flex-wrap:wrap; gap:8px; margin-top:14px; }
+.tag {
+  border:1px solid var(--line); border-radius:20px;
+  padding:4px 10px; color:var(--muted); font-size:12px;
+}
+.skill-group { margin-bottom:24px; }
+.skill-group h3 { color:var(--accent); margin-bottom:12px; }
+footer {
+  border-top:1px solid var(--line); text-align:center;
+  padding:35px 20px; color:var(--muted); font-size:13px;
+}
+#status { color:var(--muted); font-size:13px; }
+@media(max-width:700px) {
+  .hero { flex-direction:column-reverse; align-items:flex-start; gap:22px; padding:40px 0; }
+  .photo { width:150px; height:175px; }
+  .grid { grid-template-columns:1fr; }
+  .nav-inner { align-items:flex-start; flex-direction:column; }
+  .nav-links { gap:12px; }
+  section { padding:45px 0; }
+}
+</style>
+</head>
+<body>
+<nav>
+  <div class="nav-inner">
+    <div class="logo">ANNAFI / ENGINEERING</div>
+    <div class="nav-links">
+      <a href="#about">About</a>
+      <a href="#experience">Experience</a>
+      <a href="#projects">Projects</a>
+      <a href="#skills">Skills</a>
+      <a href="#education">Education</a>
+      <a href="#awards">Awards</a>
+      <a href="#contact">Contact</a>
+    </div>
+  </div>
+</nav>
+
+<main>
+  <div id="status">Loading portfolio...</div>
+
+  <header class="hero">
+    <div class="hero-copy">
+      <div class="eyebrow">Digital CV & Engineering Portfolio</div>
+      <h1 id="name">Muhamad Fatih Annafi</h1>
+      <h3 id="headline">Automation & Electronics Engineer</h3>
+      <p class="hero-desc" id="intro">Industrial Automation · Machine Development · Electronics</p>
+      <a class="btn" href="#projects">Explore My Projects</a>
+    </div>
+    <img id="photo" class="photo" alt="Professional profile photo" hidden>
+  </header>
+
+  <section id="about">
+    <h2>About Me</h2>
+    <div class="card"><p id="about-text"></p></div>
+  </section>
+
+  <section id="experience">
+    <h2>Professional Experience</h2>
+    <div class="grid" id="experience-list"></div>
+  </section>
+
+  <section id="projects">
+    <h2>Selected Projects</h2>
+    <p class="section-note">Machine development, automation and engineering improvement.</p>
+    <div class="grid" id="project-list"></div>
+  </section>
+
+  <section id="skills">
+    <h2>Technical Skills</h2>
+    <div id="skill-list"></div>
+  </section>
+
+  <section id="education">
+    <h2>Education</h2>
+    <div class="grid" id="education-list"></div>
+  </section>
+
+  <section id="awards">
+    <h2>Awards & Recognition</h2>
+    <div class="grid" id="award-list"></div>
+  </section>
+
+  <section id="contact">
+    <h2>Contact</h2>
+    <div class="card">
+      <p id="contact-email"></p>
+      <p id="contact-phone"></p>
+      <p id="contact-location"></p>
+      <p id="contact-linkedin"></p>
+    </div>
+  </section>
+</main>
+
+<footer>© <span id="year"></span> Muhamad Fatih Annafi · Engineering Portfolio</footer>
+
+<script>
+const API = "https://api.github.com/repos/Annafi02/digital-cv-portfolio/contents/";
+const BRANCH = "?ref=main";
+
+async function getJSON(path) {
+  const response = await fetch(API + path + BRANCH);
+  if (!response.ok) throw new Error("Unable to load " + path);
+  return response.json();
+}
+
+async function getCollection(folder) {
+  try {
+    const files = await getJSON(folder);
+    const jsonFiles = files.filter(f => f.name.endsWith(".json"));
+    return await Promise.all(jsonFiles.map(async file => {
+      const response = await fetch(file.download_url);
+      if (!response.ok) return null;
+      return response.json();
+    })).then(items => items.filter(Boolean));
+  } catch (error) {
+    console.warn(error);
+    return [];
+  }
+}
+
+function text(id, value) {
+  const el = document.getElementById(id);
+  if (el && value != null) el.textContent = value;
+}
+
+function makeCard(title, meta, description, extra) {
+  const card = document.createElement("article");
+  card.className = "card";
+
+  const heading = document.createElement("h3");
+  heading.textContent = title || "Untitled";
+  card.appendChild(heading);
+
+  if (meta) {
+    const info = document.createElement("div");
+    info.className = "meta";
+    info.textContent = meta;
+    card.appendChild(info);
+  }
+
+  if (description) {
+    const paragraph = document.createElement("p");
+    paragraph.textContent = description;
+    card.appendChild(paragraph);
+  }
+
+  if (extra) card.appendChild(extra);
+  return card;
+}
+
+function addTags(values) {
+  const wrapper = document.createElement("div");
+  wrapper.className = "tags";
+  String(values).split(/[,;\n]/).map(v => v.trim()).filter(Boolean)
+    .forEach(value => {
+      const tag = document.createElement("span");
+      tag.className = "tag";
+      tag.textContent = value;
+      wrapper.appendChild(tag);
+    });
+  return wrapper;
+}
+
+async function loadPortfolio() {
+  try {
+    const profile = await getJSON("data/profile.json");
+
+    text("name", profile.full_name);
+    text("headline", profile.headline);
+    text("about-text", profile.about);
+    text("contact-email", profile.email);
+    text("contact-phone", profile.phone);
+    text("contact-location", profile.location);
+
+    if (profile.linkedin) {
+      const link = document.createElement("a");
+      link.href = profile.linkedin;
+      link.target = "_blank";
+      link.rel = "noopener";
+      link.textContent = "LinkedIn Profile";
+      document.getElementById("contact-linkedin").replaceChildren(link);
+    }
+
+    if (profile.photo) {
+      const photo = document.getElementById("photo");
+      photo.src = profile.photo;
+      photo.hidden = false;
+    }
+
+    const [experiences, projects, skills, education, awards] =
+      await Promise.all([
+        getCollection("content/experience"),
+        getCollection("content/projects"),
+        getCollection("content/skills"),
+        getCollection("content/education"),
+        getCollection("content/awards")
+      ]);
+
+    experiences.sort((a,b) => (a.sort_order || 99) - (b.sort_order || 99));
+    experiences.forEach(item => {
+      document.getElementById("experience-list").appendChild(
+        makeCard(item.position, item.company + " · " + (item.period || ""), item.description)
+      );
+    });
+
+    projects.sort((a,b) => (a.sort_order || 99) - (b.sort_order || 99));
+    projects.forEach(item => {
+      const extra = addTags(item.technologies || "");
+      const card = makeCard(item.title, item.year + " · " + item.category, item.description, extra);
+      if (item.image) {
+        const img = document.createElement("img");
+        img.className = "project-image";
+        img.src = item.image;
+        img.alt = item.title || "Project image";
+        card.prepend(img);
+      }
+      document.getElementById("project-list").appendChild(card);
+    });
+
+    const groups = {};
+    skills.forEach(item => {
+      const category = item.category || "Other";
+      if (!groups[category]) groups[category] = [];
+      groups[category].push(item);
+    });
+    Object.entries(groups).forEach(([category, items]) => {
+      const group = document.createElement("div");
+      group.className = "skill-group";
+      const heading = document.createElement("h3");
+      heading.textContent = category;
+      group.appendChild(heading);
+      group.appendChild(addTags(items.map(item => item.name)));
+      document.getElementById("skill-list").appendChild(group);
+    });
+
+    education.forEach(item => {
+      document.getElementById("education-list").appendChild(
+        makeCard(item.institution, item.degree + " · " + (item.period || ""), item.description)
+      );
+    });
+
+    awards.forEach(item => {
+      document.getElementById("award-list").appendChild(
+        makeCard(item.title, item.organization + " · " + item.year, item.description)
+      );
+    });
+
+    text("status", "");
+  } catch (error) {
+    text("status", "Portfolio data could not be loaded. Please check the GitHub content files.");
+    console.error(error);
+  }
+}
+
+text("year", new Date().getFullYear());
+loadPortfolio();
+</script>
+</body>
+</html>
