@@ -163,26 +163,91 @@ footer {
 <footer>© <span id="year"></span> Muhamad Fatih Annafi · Engineering Portfolio</footer>
 
 <script>
-const API = "https://api.github.com/repos/Annafi02/digital-cv-portfolio/contents/";
-const BRANCH = "?ref=main";
+// Data repository: GitHub public repository, accessed through jsDelivr metadata/CDN.
+// This avoids GitHub's unauthenticated Contents API rate limit in visitors' browsers.
+const REPO_OWNER = "Annafi02";
+const REPO_NAME = "digital-cv-portfolio";
+const BRANCH = "main";
 
-async function getJSON(path) {
-  const response = await fetch(API + path + BRANCH);
-  if (!response.ok) throw new Error("Unable to load " + path);
-  return response.json();
+const REPO_METADATA_URL =
+  `https://data.jsdelivr.com/v1/packages/gh/${REPO_OWNER}/${REPO_NAME}@${BRANCH}?structure=flat`;
+
+const CDN_BASE =
+  `https://cdn.jsdelivr.net/gh/${REPO_OWNER}/${REPO_NAME}@${BRANCH}/`;
+
+const RAW_BASE =
+  `https://raw.githubusercontent.com/${REPO_OWNER}/${REPO_NAME}/${BRANCH}/`;
+
+let repositoryFilesPromise = null;
+
+async function getRepositoryFiles() {
+  if (!repositoryFilesPromise) {
+    repositoryFilesPromise = fetch(REPO_METADATA_URL)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(
+            `Unable to get repository file list (HTTP ${response.status})`
+          );
+        }
+        return response.json();
+      })
+      .then(data => {
+        if (!data || !Array.isArray(data.files)) {
+          throw new Error("Unexpected repository file-list format from jsDelivr");
+        }
+        return data.files
+          .map(file => typeof file.name === "string" ? file.name : "")
+          .filter(Boolean);
+      })
+      .catch(error => {
+        // Allow a later retry if the metadata service is temporarily unavailable.
+        repositoryFilesPromise = null;
+        throw error;
+      });
+  }
+
+  return repositoryFilesPromise;
+}
+
+async function getJSONFile(path) {
+  // Try jsDelivr first, then use GitHub Raw as a fallback.
+  const urls = [CDN_BASE + path, RAW_BASE + path];
+
+  for (const url of urls) {
+    try {
+      const response = await fetch(url);
+      if (response.ok) return await response.json();
+    } catch (error) {
+      console.warn("Could not load JSON from", url, error);
+    }
+  }
+
+  throw new Error("Unable to load JSON file: " + path);
 }
 
 async function getCollection(folder) {
   try {
-    const files = await getJSON(folder);
-    const jsonFiles = files.filter(f => f.name.endsWith(".json"));
-    return await Promise.all(jsonFiles.map(async file => {
-      const response = await fetch(file.download_url);
-      if (!response.ok) return null;
-      return response.json();
-    })).then(items => items.filter(Boolean));
+    const files = await getRepositoryFiles();
+    const prefix = folder.replace(/\\/$/, "") + "/";
+
+    const jsonFiles = files.filter(path =>
+      path.startsWith(prefix) && path.endsWith(".json")
+    );
+
+    const items = await Promise.all(
+      jsonFiles.map(async path => {
+        try {
+          return await getJSONFile(path);
+        } catch (error) {
+          console.warn(error);
+          return null;
+        }
+      })
+    );
+
+    return items.filter(Boolean);
   } catch (error) {
-    console.warn(error);
+    console.error("Unable to load collection:", folder, error);
     return [];
   }
 }
@@ -232,15 +297,7 @@ function addTags(values) {
 
 async function loadPortfolio() {
   try {
-    const profileResponse = await fetch(
-  "https://raw.githubusercontent.com/Annafi02/digital-cv-portfolio/main/data/profile.json"
-);
-
-if (!profileResponse.ok) {
-  throw new Error("Unable to load profile.json");
-}
-
-const profile = await profileResponse.json();
+    const profile = await getJSONFile("data/profile.json");
 
     text("name", profile.full_name);
     text("headline", profile.headline);
