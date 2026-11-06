@@ -163,17 +163,14 @@ footer {
 <footer>© <span id="year"></span> Muhamad Fatih Annafi · Engineering Portfolio</footer>
 
 <script>
-// Data repository: GitHub public repository, accessed through jsDelivr metadata/CDN.
-// This avoids GitHub's unauthenticated Contents API rate limit in visitors' browsers.
+// Read JSON content directly from GitHub Raw, with a cache-busting query.
+// jsDelivr is used only to discover repository file paths, not to serve content.
 const REPO_OWNER = "Annafi02";
 const REPO_NAME = "digital-cv-portfolio";
 const BRANCH = "main";
 
 const REPO_METADATA_URL =
   `https://data.jsdelivr.com/v1/packages/gh/${REPO_OWNER}/${REPO_NAME}@${BRANCH}?structure=flat`;
-
-const CDN_BASE =
-  `https://cdn.jsdelivr.net/gh/${REPO_OWNER}/${REPO_NAME}@${BRANCH}/`;
 
 const RAW_BASE =
   `https://raw.githubusercontent.com/${REPO_OWNER}/${REPO_NAME}/${BRANCH}/`;
@@ -182,7 +179,8 @@ let repositoryFilesPromise = null;
 
 async function getRepositoryFiles() {
   if (!repositoryFilesPromise) {
-    repositoryFilesPromise = fetch(REPO_METADATA_URL)
+    const metadataUrl = `${REPO_METADATA_URL}&_=${Date.now()}`;
+    repositoryFilesPromise = fetch(metadataUrl, { cache: "no-store" })
       .then(response => {
         if (!response.ok) {
           throw new Error(
@@ -193,21 +191,17 @@ async function getRepositoryFiles() {
       })
       .then(data => {
         if (!data || !Array.isArray(data.files)) {
-          throw new Error("Unexpected repository file-list format from jsDelivr");
+          throw new Error("Unexpected repository file-list format");
         }
         return data.files
           .map(file => {
             let name = typeof file.name === "string" ? file.name : "";
-            // Remove any leading slash without using a regular expression.
-            while (name.startsWith("/")) {
-              name = name.slice(1);
-            }
+            while (name.startsWith("/")) name = name.slice(1);
             return name;
           })
           .filter(Boolean);
       })
       .catch(error => {
-        // Allow a later retry if the metadata service is temporarily unavailable.
         repositoryFilesPromise = null;
         throw error;
       });
@@ -217,26 +211,18 @@ async function getRepositoryFiles() {
 }
 
 async function getJSONFile(path) {
-  // Try jsDelivr first, then use GitHub Raw as a fallback.
-  const urls = [CDN_BASE + path, RAW_BASE + path];
-
-  for (const url of urls) {
-    try {
-      const response = await fetch(url);
-      if (response.ok) return await response.json();
-    } catch (error) {
-      console.warn("Could not load JSON from", url, error);
-    }
+  const url = `${RAW_BASE}${path}?_=${Date.now()}`;
+  const response = await fetch(url, { cache: "no-store" });
+  if (!response.ok) {
+    throw new Error(`Unable to load ${path} (HTTP ${response.status})`);
   }
-
-  throw new Error("Unable to load JSON file: " + path);
+  return response.json();
 }
 
 async function getCollection(folder) {
   try {
     const files = await getRepositoryFiles();
-    const prefix = folder.replace(/\/$/, "") + "/";
-
+    const prefix = folder.endsWith("/") ? folder : folder + "/";
     const jsonFiles = files.filter(path =>
       path.startsWith(prefix) && path.endsWith(".json")
     );
