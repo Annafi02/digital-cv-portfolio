@@ -4,5 +4,5 @@
   "category": "Industry 4.0 & IoT",
   "description": "Project Overview\n\nDevelopment of an IoT-based electrical power monitoring system to monitor the company's electricity consumption.\n\nProject Objective\n\nTo provide better visibility of electrical energy consumption through a monitoring system, supporting energy management and operational monitoring.\n\nSolution\n\nDeveloped an IoT-based monitoring solution for collecting and monitoring electrical power consumption data.\n\nThe system was intended to make electrical energy usage information more accessible for monitoring and analysis.\n\nMy Contribution\n\nInvolved in the development and implementation of the electrical power monitoring solution as part of the company's Industry 4.0 initiatives.",
   "technologies": "Industrial IoT, Electrical Power Monitoring, Data Acquisition, Energy Monitoring, Industry 4.0",
-  "sort_order": 1
+  "sort_order": 6
 }
