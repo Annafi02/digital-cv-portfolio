@@ -232,7 +232,15 @@ function addTags(values) {
 
 async function loadPortfolio() {
   try {
-    const profile = await getJSON("data/profile.json");
+    const profileResponse = await fetch(
+  "https://raw.githubusercontent.com/Annafi02/digital-cv-portfolio/main/data/profile.json"
+);
+
+if (!profileResponse.ok) {
+  throw new Error("Unable to load profile.json");
+}
+
+const profile = await profileResponse.json();
 
     text("name", profile.full_name);
     text("headline", profile.headline);
